@@ -2,12 +2,17 @@ package developer.ujjwal.testapp1;
 
 import android.content.Intent;
 import android.provider.Settings;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -26,14 +31,44 @@ public class RegisterActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String n = name.getText().toString().trim();
+                if (n.isEmpty() || name.length() < 3) {
+                    showError(1);
+                    return;
+                }
+
+                String phoneNumber = phone.getText().toString().trim();
+                Pattern p = Pattern.compile("^[6-9][0-9]{9}$");
+                Matcher m = p.matcher(phoneNumber);
+                if (phoneNumber.isEmpty() || !m.find()) {
+                    showError(2);
+                    return;
+                }
+                phoneNumber = "+91" + phoneNumber;
+
+
                 //Secure Android ID :: https://medium.com/@ssaurel/how-to-retrieve-an-unique-id-to-identify-android-devices-6f99fd5369eb
                 String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-                Toast.makeText(getApplicationContext(), android_id, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Secure Android ID: " + android_id, Toast.LENGTH_SHORT).show();
 
-                Intent in = new Intent(getApplicationContext(), MainActivity.class);
-                //startActivity(in);
+                Intent in = new Intent(getApplicationContext(), OtpActivity.class);
+                in.putExtra("phoneNumber", phoneNumber);
+                startActivity(in);
                 //finish();
             }
         });
+    }
+
+    private void showError(int i) {
+        switch (i) {
+            case 1:
+                name.requestFocus();
+                name.setError("Enter Name");
+                break;
+            case 2:
+                phone.requestFocus();
+                phone.setError("Invalid Phone");
+                break;
+        }
     }
 }
