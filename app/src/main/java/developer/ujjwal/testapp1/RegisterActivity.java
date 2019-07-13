@@ -2,7 +2,6 @@ package developer.ujjwal.testapp1;
 
 import android.content.Context;
 import android.content.Intent;
-import android.provider.Settings;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,8 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.net.NetworkInterface;
 import java.util.Collections;
@@ -23,57 +25,88 @@ import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText name, phone;
-    Button submit;
+    EditText nameEditText, phoneEditText;
+    Button submitButton;
+    String name, phone, mac, userIdPhone;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static final String MAC_KEY = "Mac";
+    private static final String ACTIVE_KEY = "Active";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        mac = getBeautifulMac(getApplicationContext());
+/*
+        //Secure Android ID :: https://medium.com/@ssaurel/how-to-retrieve-an-unique-id-to-identify-android-devices-6f99fd5369eb
+        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        Toast.makeText(getApplicationContext(), "Secure Android ID: " + android_id, Toast.LENGTH_SHORT).show();
+*/
+
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser mUser = mAuth.getCurrentUser();
         try {
-            Toast.makeText(getApplicationContext(), mUser.getPhoneNumber(), Toast.LENGTH_SHORT).show();
-            if (mUser.getPhoneNumber() != null) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
+            userIdPhone = mUser.getPhoneNumber();
+
+            if (userIdPhone != null) {
+                db.collection("users")
+                        .document(userIdPhone)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                String m = documentSnapshot.getString(MAC_KEY);
+                                Boolean a = documentSnapshot.getBoolean(ACTIVE_KEY);
+
+                                //Existing User(Check Data)
+                                if (m != null && a != null) {
+                                    //Active User
+                                    if (m.equals(mac) && a.toString().equals("true")) {
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                    //Inactive User
+                                    else {
+                                        Toast.makeText(getApplicationContext(), "You Are Not Allow", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                }
+                            }
+                        });
             }
         } catch (NullPointerException e) {
             Toast.makeText(getApplicationContext(), "Please Submit Details", Toast.LENGTH_SHORT).show();
         }
 
-        name = findViewById(R.id.activityRegisterName);
-        phone = findViewById(R.id.activityRegisterPhone);
-        submit = findViewById(R.id.activityRegisterSubmit);
+        nameEditText = findViewById(R.id.activityRegisterName);
+        phoneEditText = findViewById(R.id.activityRegisterPhone);
+        submitButton = findViewById(R.id.activityRegisterSubmit);
 
-        submit.setOnClickListener(new View.OnClickListener() {
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String n = name.getText().toString().trim();
-                if (n.isEmpty() || name.length() < 3) {
+                name = nameEditText.getText().toString().trim();
+                if (name.isEmpty() || name.length() < 3) {
                     showError(1);
                     return;
                 }
 
-                String phoneNumber = phone.getText().toString().trim();
+                phone = phoneEditText.getText().toString().trim();
                 Pattern p = Pattern.compile("^[6-9][0-9]{9}$");
-                Matcher m = p.matcher(phoneNumber);
-                if (phoneNumber.isEmpty() || !m.find()) {
+                Matcher m = p.matcher(phone);
+                if (phone.isEmpty() || !m.find()) {
                     showError(2);
                     return;
                 }
-                phoneNumber = "+91" + phoneNumber;
+                phone = "+91" + phone;
 
-                Toast.makeText(getApplicationContext(), getBeautifulMac(getApplicationContext()), Toast.LENGTH_SHORT).show();
-/*
-                //Secure Android ID :: https://medium.com/@ssaurel/how-to-retrieve-an-unique-id-to-identify-android-devices-6f99fd5369eb
-                String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-                Toast.makeText(getApplicationContext(), "Secure Android ID: " + android_id, Toast.LENGTH_SHORT).show();
-*/
                 Intent in = new Intent(getApplicationContext(), OtpActivity.class);
-                in.putExtra("phoneNumber", phoneNumber);
+                in.putExtra("name", name);
+                in.putExtra("phone", phone);
+                in.putExtra("mac", mac);
                 startActivity(in);
                 //finish();
             }
@@ -83,12 +116,12 @@ public class RegisterActivity extends AppCompatActivity {
     private void showError(int i) {
         switch (i) {
             case 1:
-                name.requestFocus();
-                name.setError("Enter Name");
+                nameEditText.requestFocus();
+                nameEditText.setError("Enter Name");
                 break;
             case 2:
-                phone.requestFocus();
-                phone.setError("Invalid Phone");
+                phoneEditText.requestFocus();
+                phoneEditText.setError("Invalid Phone");
                 break;
         }
     }
