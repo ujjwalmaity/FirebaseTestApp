@@ -14,15 +14,15 @@
 
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".OtpActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".RegisterActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
