@@ -1,4 +1,4 @@
-package developer.ujjwal.testapp1;
+package developer.ujjwal.firebasetestapp;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;

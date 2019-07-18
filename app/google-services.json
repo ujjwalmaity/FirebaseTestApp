@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "283792589741",
-    "firebase_url": "https://testapp1-52cff.firebaseio.com",
-    "project_id": "testapp1-52cff",
-    "storage_bucket": "testapp1-52cff.appspot.com"
+    "project_number": "901500424396",
+    "firebase_url": "https://fir-testapp-be98e.firebaseio.com",
+    "project_id": "fir-testapp-be98e",
+    "storage_bucket": "fir-testapp-be98e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:283792589741:android:d370a70cdef0bd41",
+        "mobilesdk_app_id": "1:901500424396:android:fb48e5e7b425a610",
         "android_client_info": {
-          "package_name": "developer.ujjwal.testapp1"
+          "package_name": "developer.ujjwal.firebasetestapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "283792589741-49uobrbnoolcvj3vuhe34e2s34v3bemm.apps.googleusercontent.com",
+          "client_id": "901500424396-jlbm73t2pm6vrluvf45gogqs62rsfvev.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "developer.ujjwal.testapp1",
+            "package_name": "developer.ujjwal.firebasetestapp",
             "certificate_hash": "100beb6bec62c3242475342c3efc5a8a9422ee9a"
           }
         },
         {
-          "client_id": "283792589741-3gq97a5nb041garlkeepvmt38d772m6t.apps.googleusercontent.com",
+          "client_id": "901500424396-k8c2la0h5t9ali9908cm0g74kpeihffa.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBPW47PBPqPPcpe6C-vg1KZfqz2_S_vvqg"
+          "current_key": "AIzaSyDNNQsyzjta3XW-W1uWfehuHL1qytMmJ80"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "283792589741-3gq97a5nb041garlkeepvmt38d772m6t.apps.googleusercontent.com",
+              "client_id": "901500424396-k8c2la0h5t9ali9908cm0g74kpeihffa.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

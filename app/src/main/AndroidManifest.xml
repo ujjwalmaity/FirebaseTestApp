@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="developer.ujjwal.testapp1">
+    package="developer.ujjwal.firebasetestapp">
 
     <uses-feature android:name="android.hardware.wifi" />
 

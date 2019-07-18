@@ -1,4 +1,4 @@
-package developer.ujjwal.testapp1;
+package developer.ujjwal.firebasetestapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
