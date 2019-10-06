@@ -1,4 +1,4 @@
-# TestApp1
+# FirebaseTestApp
 
 ## Resource Uses
 
